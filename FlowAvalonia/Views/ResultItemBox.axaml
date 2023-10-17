@@ -1,0 +1,91 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:FlowAvalonia.ViewModels"
+             xmlns:local="using:FlowAvalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="FlowAvalonia.Views.ResultItemBox"
+             x:DataType="local:Composition"
+             DataContext="{StaticResource Composition}"
+             x:CompileBindings="True">
+    <ListBox
+        DataContext="{Binding ResultsBoxViewModel}"
+        x:Name="ResultRepeater"
+        ItemsSource="{Binding Items, Mode=OneWay}"
+        HorizontalAlignment="Stretch"
+        SelectedIndex="{Binding SelectedIndex}"
+        MaxHeight="500"
+        SelectionMode="AlwaysSelected"
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel AreVerticalSnapPointsRegular="True"></VirtualizingStackPanel>
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+            <DataTemplate DataType="viewModels:ResultItemViewModel">
+                <Border Cursor="Hand"
+                        Width="500">
+                    <Button>
+                        <Button.Template>
+                            <ControlTemplate>
+                                <ContentPresenter Content="{TemplateBinding Button.Content}" />
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Content>
+                            <Grid
+                                Margin="0"
+                                Height="40">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" MinWidth="8" />
+                                </Grid.ColumnDefinitions>
+                                <Border
+                                    Grid.Column="0"
+                                    Margin="9,0,0,0"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="1">
+                                    <Image
+                                        x:Name="ImageIcon"
+                                        Margin="0,0,0,0"
+                                        Source="{Binding Image^}"
+                                        Stretch="Fill"
+                                        Height="32"
+                                        Width="32">
+                                        <Image.Clip>
+                                            <EllipseGeometry
+                                                Center="16,16"
+                                                RadiusX="{Binding IconRadius}"
+                                                RadiusY="{Binding IconRadius}" />
+                                        </Image.Clip>
+                                    </Image>
+                                </Border>
+                                <Grid Grid.Column="1"
+                                      Margin="6,0,10,0"
+                                      RowDefinitions="Auto,Auto">
+                                    <ProgressBar
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Foreground="{Binding Result.ProgressBarColor}"
+                                        Background="Transparent"
+                                        Value="0" />
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Text="{Binding Result.Title}"
+                                        ToolTip.Tip="{Binding Result.TitleToolTip}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Text="{Binding Result.SubTitle}"
+                                        ToolTip.Tip="{Binding Result.SubTitleToolTip}" />
+                                </Grid>
+                            </Grid>
+                        </Button.Content>
+                    </Button>
+                </Border>
+
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</UserControl>

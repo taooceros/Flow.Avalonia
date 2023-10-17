@@ -1,0 +1,73 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <!-- if you want to check exceptions, change this to "Exe" and start your app from the console -->
+        <OutputType Condition="'$(Configuration.toUpper())' != 'DEBUG'">WinExe</OutputType>
+        <OutputType Condition="'$(Configuration.toUpper())' == 'DEBUG'">Exe</OutputType>
+        <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
+        <ApplicationIcon>Assets/avalonia-logo.ico</ApplicationIcon>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <Nullable>enable</Nullable>
+        <PublishAot>true</PublishAot>
+        <PublishTrimmed>true</PublishTrimmed>
+        <SelfContained>true</SelfContained>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TrimMode>link</TrimMode>
+        <!--These can help when debugging weird exceptions especially when reflection is involved. See https://github.com/dotnet/corert/blob/master/Documentation/using-corert/optimizing-corert.md -->
+        <!--RootAllApplicationAssemblies: False -> TrimMode:link See https://github.com/dotnet/runtimelab/issues/597 and https://github.com/dotnet/runtimelab/blob/feature/NativeAOT/docs/using-nativeaot/optimizing.md -->
+        <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
+        <IlcGenerateStackTraceData Condition="'$(Configuration.toUpper())' != 'DEBUG'">false</IlcGenerateStackTraceData>
+        <IlcDisableUnhandledExceptionExperience>true</IlcDisableUnhandledExceptionExperience>
+        <StripSymbols Condition="'$(Configuration.toUpper())' != 'DEBUG'">true</StripSymbols>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectCapability Include="Avalonia" />
+        <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.0.0-rc1.1" />
+        <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.0-rc1.1" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.0.0-rc1.1" />
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-rc1.1" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-rc1.1" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-rc1.1" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+        <PackageReference Include="DynamicData" Version="7.14.2" />
+        <PackageReference Include="Pure.DI" Version="2.0.0-beta3">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="ReactiveUI" Version="19.2.1" />
+        <PackageReference Include="ToolGood.Words.Pinyin" Version="3.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Theme\Win11System.xaml" />
+      <Resource Include="Theme\Win11System.xaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Theme\Base.xaml" />
+      <Resource Include="Theme\Base.xaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Plugins\Flow.Launcher.Plugin.Program\Flow.Launcher.Plugin.Program.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Models\" />
+    </ItemGroup>
+</Project>
